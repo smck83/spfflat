@@ -64,3 +64,6 @@ services:
 
       # ── ALERTING: MS TEAMS (optional) ─────────────────────────────────
       # TEAMS_WEBHOOK_URL: "${TEAMS_WEBHOOK_URL}"
+
+      # ── ALERTING: DISCORD (optional) ──────────────────────────────────
+      # DISCORD_WEBHOOK_URL: "${DISCORD_WEBHOOK_URL}"

@@ -104,6 +104,9 @@ TELEGRAM_CHAT_ID   = os.environ.get("TELEGRAM_CHAT_ID", "")
 # Alerting - MS Teams
 TEAMS_WEBHOOK_URL = os.environ.get("TEAMS_WEBHOOK_URL", "")
 
+# Alerting - Discord
+DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL", "")
+
 # ---------------------------------------------------------------------------
 # DNS Resolver
 # ---------------------------------------------------------------------------
@@ -750,6 +753,8 @@ def send_alerts(subject: str, body: str):
         _send_telegram(subject, body)
     if TEAMS_WEBHOOK_URL:
         _send_teams(subject, body)
+    if DISCORD_WEBHOOK_URL:
+        _send_discord(subject, body)
 
 def _send_email(subject: str, body: str):
     try:
@@ -815,6 +820,23 @@ def _send_teams(subject: str, body: str):
         log.info("Teams alert sent")
     except Exception as e:
         log.error("Failed to send Teams alert: %s", e)
+
+
+def _send_discord(subject: str, body: str):
+    try:
+        # Discord webhooks accept an "embeds" payload for rich formatting.
+        payload = {
+            "embeds": [{
+                "title": subject,
+                "description": f"```\n{body}\n```",
+                "color": 0x5865F2,  # Discord blurple
+            }]
+        }
+        resp = _http("POST", DISCORD_WEBHOOK_URL, label="Discord alert", json=payload)
+        resp.raise_for_status()
+        log.info("Discord alert sent")
+    except Exception as e:
+        log.error("Failed to send Discord alert: %s", e)
 
 
 # ===========================================================================

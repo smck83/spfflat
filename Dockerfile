@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-LABEL maintainer="spfflat"
+LABEL maintainer="s@mck.la"
 LABEL description="SPF Record Flattener - Cloudflare / Route53 / Bunny.net"
 
 WORKDIR /app
