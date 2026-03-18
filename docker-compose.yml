@@ -1,0 +1,66 @@
+###############################################################################
+# docker-compose.yml — SPF Flattener
+#
+# Usage:
+#   docker compose up -d
+#
+# All config is via environment variables. Uncomment/set what you need.
+###############################################################################
+
+services:
+  spfflat:
+    build: .
+    container_name: spfflat
+    restart: unless-stopped
+    environment:
+      # ── REQUIRED ──────────────────────────────────────────────────────
+      SOURCE_ID: "abcd123"
+      MY_DOMAINS: "zen.spf.guru"
+
+      # ── DNS PROVIDER (cloudflare | route53 | bunny) ───────────────────
+      DNS_PROVIDER: "BUNNY"
+
+      # ── SCHEDULE (minutes between checks, default 60) ─────────────────
+      SCHEDULE: "60"
+
+      # ── DNS OPTIONS ───────────────────────────────────────────────────
+      DNS_TTL: "300"
+      RESOLVERS: "1.1.1.1,8.8.8.8"
+      MAX_TXT_LEN: "450"
+      # SPF_ALL_QUALIFIER: "~all"    # override the all qualifier from source
+      # DRY_RUN: "true"              # log what would change, don't touch DNS
+      # RUN_ONCE: "true"             # run one cycle then exit
+      # LOG_LEVEL: "DEBUG"           # DEBUG, INFO, WARNING, ERROR
+
+      # ── CLOUDFLARE ────────────────────────────────────────────────────
+      # CF_API_TOKEN: "${CF_API_TOKEN}"
+      # Or use legacy key + email:
+      # CF_API_KEY: "${CF_API_KEY}"
+      # CF_API_EMAIL: "${CF_API_EMAIL}"
+
+      # ── ROUTE53 ──────────────────────────────────────────────────────
+      # AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      # AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      # AWS_REGION: "us-east-1"
+
+      # ── BUNNY.NET ────────────────────────────────────────────────────
+      BUNNY_API_KEY: "${BUNNY_API_KEY}"
+
+      # ── ALERTING: EMAIL (all optional) ────────────────────────────────
+      # SMTP_HOST: "smtp.example.com"
+      # SMTP_PORT: "587"
+      # SMTP_USER: "alerts@example.com"
+      # SMTP_PASS: "${SMTP_PASS}"
+      # SMTP_FROM: "spfflat@example.com"
+      # SMTP_TO: "dnsadmins@example.com,ops@example.com"
+      # SMTP_TLS: "true"
+
+      # ── ALERTING: SLACK (optional) ────────────────────────────────────
+      # SLACK_WEBHOOK_URL: "${SLACK_WEBHOOK_URL}"
+
+      # ── ALERTING: TELEGRAM (optional) ─────────────────────────────────
+      # TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
+      # TELEGRAM_CHAT_ID: "${TELEGRAM_CHAT_ID}"
+
+      # ── ALERTING: MS TEAMS (optional) ─────────────────────────────────
+      # TEAMS_WEBHOOK_URL: "${TEAMS_WEBHOOK_URL}"
